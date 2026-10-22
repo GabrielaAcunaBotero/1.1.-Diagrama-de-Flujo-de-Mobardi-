@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mobardi AS-IS</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: documento técnico de una columna sobre azul marino; cada fase es una lámina con su diagrama en pasteles vivos */
+:root{
+  --bg:#0b1630; --bg2:#0f1e3f; --surface:#132550; --fg:#e8eefb; --muted:#a9b8d8; --line:#24396b;
+  --accent:#7cc8ff; --mint:#9ff0c9; --lav:#cbb6ff; --peach:#ffc49b; --pink:#ffb3cf;
+  --f-display:"Instrument Sans",system-ui,sans-serif;
+  --f-body:"Instrument Sans",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+html{background:var(--bg)}
+body{background:radial-gradient(1200px 600px at 85% -10%,#1b3270 0%,transparent 60%),var(--bg);background-color:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:48px 72px;margin:0}
+.wrap{max-width:1060px;margin:0 auto;display:flex;flex-direction:column;gap:44px}
+header{display:flex;flex-direction:column;gap:14px;padding-bottom:28px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--f-display);font-size:clamp(30px,5vw,48px);line-height:1.05;margin:0;font-weight:700;text-wrap:balance;letter-spacing:-.015em}
+h1 em{font-style:normal;color:var(--mint)}
+h2{font-size:22px;margin:0;text-wrap:balance}
+h3{font-size:16px;margin:0 0 10px;color:var(--fg)}
+p{margin:0;max-width:68ch}
+.lede{color:var(--muted);font-size:16px}
+.legend{display:flex;flex-wrap:wrap;gap:10px 20px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.sw{width:22px;height:14px;border-radius:4px;border:1.5px solid transparent}
+.sw.ok{background:var(--mint)}
+.sw.var{background:var(--lav);border-color:#8c6be0;border-style:dashed}
+.sw.pend{background:var(--peach);border-color:#d9803f;border-style:dashed}
+.sw.dec{background:var(--accent);transform:rotate(45deg) scale(.7);width:16px;height:16px}
+.sw.term{background:var(--pink);border-radius:99px}
+.notice{border-left:3px solid var(--peach);background:rgba(255,196,155,.1);padding:12px 16px;border-radius:0 8px 8px 0;font-size:14px;color:var(--fg)}
+section.phase{display:flex;flex-direction:column;gap:14px}
+.phase-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.code{font-family:var(--f-mono);font-size:14px;font-weight:500;color:var(--bg);background:var(--accent);width:32px;height:32px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.diagram{background:linear-gradient(180deg,var(--surface),var(--bg2));border:1px solid var(--line);border-radius:12px;overflow-x:auto;padding:22px;box-shadow:0 12px 30px -18px rgba(0,0,0,.7)}
+.diagram pre.mermaid{margin:0;display:flex;justify-content:center;min-width:min-content;background:transparent;color:var(--muted);font-size:12px}
+.notes{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:4px;padding-left:18px;margin:0}
+.notes li::marker{color:var(--accent)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--f-mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);font-weight:500;background:var(--bg2)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-family:var(--f-mono);color:var(--muted)}
+.pill{font-family:var(--f-mono);font-size:11px;padding:3px 9px;border-radius:99px;white-space:nowrap;color:#0b1630;font-weight:500}
+.pill.pend{background:var(--peach)}
+.pill.var{background:var(--lav)}
+.pill.no{background:var(--pink)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.grid2>div{min-width:0}
+footer{font-size:12px;color:var(--muted);font-family:var(--f-mono);border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Levantamiento de procesos · AS-IS · Versión preliminar</div>
+  <h1>Proceso actual de <em>Mobardi S.A.S.</em></h1>
+  <p class="lede">Flujo real desde que un cliente manifiesta su necesidad hasta la instalación, entrega y cobro de ventanas en aluminio y PVC. Documenta lo que hoy se hace, incluidas las prácticas informales y los vacíos, sin proponer mejoras.</p>
+  <div class="legend">
+    <span><i class="sw ok"></i>Actividad que se realiza</span>
+    <span><i class="sw var"></i>Práctica variable o no estandarizada</span>
+    <span><i class="sw pend"></i>Procedimiento no definido / por confirmar</span>
+    <span><i class="sw dec"></i>Decisión</span>
+    <span><i class="sw term"></i>Inicio, fin o conector</span>
+  </div>
+  <div class="notice">La descripción recibida se interrumpe en la sección 13 (Garantía posterior). Esa etapa aparece como pendiente hasta completar la información.</div>
+</header>
+
+<section class="phase">
+  <div class="phase-head"><span class="code">A</span><h2>Recepción de la solicitud e identificación de la necesidad</h2></div>
+  <div class="diagram"><pre class="mermaid">
+flowchart TD
+  A0(["Cliente contacta a Mobardi"]) --> A1{"Canal de entrada"}
+  A1 -->|"Correo electrónico"| A2["Cliente escribe pidiendo cotización<br/>y envía algunos datos"]
+  A2 --> A3["Traslado manual de la información<br/>del correo a WhatsApp"]
+  A1 -->|"WhatsApp"| A4["Conversación comercial por WhatsApp<br/>canal principal"]
+  A3 --> A4
+  A4 --> A5["Preguntar al cliente qué necesita"]
+  A5 --> A6{"Tipo de solicitud"}
+  A6 -->|"Instalación nueva<br/>la más habitual"| B1["Solicitar datos del proyecto: medidas, fotos,<br/>planos si hay, diseño, color, modulación,<br/>apertura, material, aislamiento"]
+  A6 -->|"Garantía"| G1["Preguntar qué problema presenta la ventana<br/>y pedir datos del caso"]
+  A6 -->|"Mantenimiento<br/>poco frecuente"| M1["Preguntar qué necesita el cliente"]
+  G1 --> G2["Etapas posteriores de garantía:<br/>procedimiento no definido"]
+  M1 --> M2["Etapas posteriores de mantenimiento:<br/>procedimiento no definido"]
+  B1 --> B2{"¿Información suficiente<br/>para cotizar?"}
+  B2 -->|"No"| B3["Se sigue pidiendo información por WhatsApp<br/>sin formato de levantamiento"]
+  B3 --> B2
+  B2 -->|"Sí"| B4["Revisar diseño, color y modulación<br/>existentes del conjunto, cuando aplica"]
+  B4 --> NEXT(["Continúa en B"])
+  classDef ok fill:#9ff0c9,stroke:#2fbf85,color:#0b1630,stroke-width:1.5px
+  classDef var fill:#cbb6ff,stroke:#8c6be0,color:#0b1630,stroke-dasharray:5 3,stroke-width:1.5px
+  classDef pend fill:#ffc49b,stroke:#d9803f,color:#0b1630,stroke-dasharray:5 3,stroke-width:1.5px
+  class A2,A4,A5,B1,G1,M1,B4 ok
+  class A3,B3 var
+  class G2,M2 pend
+  classDef term fill:#ffb3cf,stroke:#e2659a,color:#0b1630,stroke-width:1.5px
+  class A0,NEXT term
+  </pre></div>
+  <ul class="notes">
+    <li>La mayoría de proyectos son conjuntos residenciales que conservan el diseño existente; los diseños nuevos o personalizados son poco frecuentes.</li>
+    <li>Garantía y mantenimiento se representan como ramas propias. No se asume que sigan el flujo de instalaciones nuevas.</li>
+  </ul>
+</section>
+
+<section class="phase">
+  <div class="phase-head"><span class="code">B</span><h2>Cotización, seguimiento y decisión del cliente</h2></div>
+  <div class="diagram"><pre class="mermaid">
+flowchart TD
+  C0(["Viene de A"]) --> C1["Elaborar cotización en archivo de Excel<br/>medidas, características, material,<br/>apertura y tipo de vidrio"]
+  C1 --> C2{"¿El cliente pidió alternativas?"}
+  C2 -->|"Sí"| C3["Preparar las alternativas a comparar<br/>PVC o aluminio, corrediza o batiente,<br/>otras configuraciones"]
+  C2 -->|"No"| C4["Enviar cotización por WhatsApp"]
+  C3 --> C4
+  C4 --> D1{"Respuesta del cliente"}
+  D1 -->|"Rechaza"| D2(["Oportunidad cerrada"])
+  D1 -->|"No responde"| D3["Seguimiento por mensaje después de un tiempo<br/>sin plazo ni secuencia definidos"]
+  D3 --> D1
+  D1 -->|"Objeciones o preguntas"| D4["Continúa la conversación comercial"]
+  D4 --> D1
+  D1 -->|"Pide cambios u otras alternativas"| C1
+  D1 -->|"Acepta"| NEXT(["Continúa en C"])
+  classDef ok fill:#9ff0c9,stroke:#2fbf85,color:#0b1630,stroke-width:1.5px
+  classDef var fill:#cbb6ff,stroke:#8c6be0,color:#0b1630,stroke-dasharray:5 3,stroke-width:1.5px
+  class C1,C3,C4,D4 ok
+  class D3 var
+  classDef term fill:#ffb3cf,stroke:#e2659a,color:#0b1630,stroke-width:1.5px
+  class C0,D2,NEXT term
+  </pre></div>
+  <ul class="notes">
+    <li>No existe un cotizador automatizado confirmado en operación; la cotización se hace en Excel.</li>
+    <li>No hay número definido de intentos de seguimiento ni regla de cierre automático.</li>
+  </ul>
+</section>
+
+<section class="phase">
+  <div class="phase-head"><span class="code">C</span><h2>Formalización, despiece, compras y fabricación</h2></div>
+  <div class="diagram"><pre class="mermaid">
+flowchart TD
+  E0(["Viene de B: cliente acepta"]) --> E1["Elaborar contrato"]
+  E1 --> E2["Gestionar póliza"]
+  E2 --> E3["Solicitar anticipo<br/>____ %"]
+  E3 --> E4{"¿Anticipo recibido?"}
+  E4 -->|"No"| E5["Qué se hace si no llega:<br/>por confirmar"]
+  E4 -->|"Sí"| F1["Despiece del proyecto<br/>cantidades y especificaciones"]
+  F1 --> F2["Compra o solicitud de materiales<br/>perfiles, vidrios, accesorios, bisagras,<br/>tornillería, cartón y protección"]
+  F2 --> F3["Espera del tiempo de fabricación<br/>tiempos no definidos"]
+  F3 --> F4["Pago asociado al despacho o entrega<br/>del material ____ %<br/>condiciones por confirmar"]
+  F4 --> NEXT(["Continúa en D"])
+  classDef ok fill:#9ff0c9,stroke:#2fbf85,color:#0b1630,stroke-width:1.5px
+  classDef var fill:#cbb6ff,stroke:#8c6be0,color:#0b1630,stroke-dasharray:5 3,stroke-width:1.5px
+  classDef pend fill:#ffc49b,stroke:#d9803f,color:#0b1630,stroke-dasharray:5 3,stroke-width:1.5px
+  class E1,E2 ok
+  class F1,F2,F3 var
+  class E3,E5,F4 pend
+  classDef term fill:#ffb3cf,stroke:#e2659a,color:#0b1630,stroke-width:1.5px
+  class E0,NEXT term
+  </pre></div>
+  <ul class="notes">
+    <li>Se mencionó una estructura aproximada de 60 % · 20 % · 20 %, pendiente de verificar. No se usa como política.</li>
+    <li>El orden entre despiece y compras no siempre es uniforme; se muestran como actividades identificadas, no como secuencia estandarizada.</li>
+    <li>No hay proveedores, controles de calidad ni aprobaciones formales confirmados en esta etapa.</li>
+  </ul>
+</section>
+
+<section class="phase">
+  <div class="phase-head"><span class="code">D</span><h2>Coordinación, instalación, entrega y cobro</h2></div>
+  <div class="diagram"><pre class="mermaid">
+flowchart TD
+  H0(["Viene de C"]) --> H1["Coordinar logística: fecha, disponibilidad del cliente,<br/>instaladores, transporte, lugar y condiciones<br/>de llegada de materiales"]
+  H1 --> H2["Preparar y proteger el área: cartón en pisos y madera,<br/>zonas sensibles, indicaciones del cliente<br/>sin lista de verificación"]
+  H2 --> H3{"¿Ventanas antiguas que lo requieran?<br/>poco frecuente"}
+  H3 -->|"Sí"| H4["Cinta especial para desmontar<br/>sin romper el vidrio"]
+  H3 -->|"No"| I1
+  H4 --> I1["Día de instalación: llegada al lugar<br/>y protección del área"]
+  I1 --> I2{"¿Hay ventanas existentes<br/>por retirar?"}
+  I2 -->|"Sí"| I3["Desmontar retirando elementos de fijación<br/>y retirar elementos anteriores"]
+  I2 -->|"No"| I4
+  I3 --> R1{"Destino de las ventanas retiradas<br/>sin servicio formal"}
+  R1 -->|"Variable"| R2["Persona externa las recoge para reciclaje<br/>· se paga por el retiro<br/>· el cliente se las queda<br/>· otra situación"]
+  R2 --> I4["Instalar las ventanas nuevas"]
+  I4 --> I5["Acompañar y atender novedades<br/>comunicación con el cliente"]
+  I5 --> J1["Entrega al cliente final<br/>sin acta formal; firma o constancia según el caso"]
+  J1 --> J2["Cobro del saldo final ____ %"]
+  J2 --> J3{"¿Pago recibido?"}
+  J3 -->|"Sí"| J4(["Proyecto pagado"])
+  J3 -->|"No / pendiente<br/>p. ej. garantía o inconformidad"| J5["Sin mecanismo de cobro definido"]
+  J4 --> K1["Garantía posterior:<br/>información incompleta"]
+  J5 --> K1
+  classDef ok fill:#9ff0c9,stroke:#2fbf85,color:#0b1630,stroke-width:1.5px
+  classDef var fill:#cbb6ff,stroke:#8c6be0,color:#0b1630,stroke-dasharray:5 3,stroke-width:1.5px
+  classDef pend fill:#ffc49b,stroke:#d9803f,color:#0b1630,stroke-dasharray:5 3,stroke-width:1.5px
+  class H1,I1,I3,I4,I5 ok
+  class H2,H4,R2,J1 var
+  class J2,J5,K1 pend
+  classDef term fill:#ffb3cf,stroke:#e2659a,color:#0b1630,stroke-width:1.5px
+  class H0,J4 term
+  </pre></div>
+  <ul class="notes">
+    <li>La entrega física del proyecto no equivale a la confirmación del pago total.</li>
+    <li>El acta de entrega formal se considera deseable pero hoy no se ejecuta, por eso no aparece como actividad.</li>
+  </ul>
+</section>
+
+<section class="phase">
+  <div class="phase-head"><span class="code">P</span><h2>Procesos paralelos de apoyo</h2></div>
+  <p class="lede">No son etapas obligatorias entre la venta y la instalación. Corren en paralelo al flujo comercial y operativo.</p>
+  <div class="grid2">
+    <div class="diagram"><h3>Contabilidad</h3><pre class="mermaid">
+flowchart TD
+  K0["Consulta las facturas electrónicas<br/>directamente en la DIAN"] --> K1["Informa cuánto debe pagar Mobardi<br/>por impuestos y a quién"]
+  K1 --> K2["Pagos tributarios: responsable<br/>y forma por confirmar"]
+  classDef ok fill:#9ff0c9,stroke:#2fbf85,color:#0b1630,stroke-width:1.5px
+  classDef pend fill:#ffc49b,stroke:#d9803f,color:#0b1630,stroke-dasharray:5 3,stroke-width:1.5px
+  class K0,K1 ok
+  class K2 pend
+  classDef term fill:#ffb3cf,stroke:#e2659a,color:#0b1630,stroke-width:1.5px
+  </pre></div>
+    <div class="diagram"><h3>Tecnología</h3><pre class="mermaid">
+flowchart TD
+  T0["Gestión de pauta publicitaria<br/>activa"]
+  T1["Cotizador de Mobardi<br/>estado por confirmar"]
+  T2["Gestión de clientes y<br/>generación de oportunidades<br/>estado por confirmar"]
+  T3["Otros proyectos tecnológicos<br/>estado por confirmar"]
+  classDef ok fill:#9ff0c9,stroke:#2fbf85,color:#0b1630,stroke-width:1.5px
+  classDef pend fill:#ffc49b,stroke:#d9803f,color:#0b1630,stroke-dasharray:5 3,stroke-width:1.5px
+  class T0 ok
+  class T1,T2,T3 pend
+  classDef term fill:#ffb3cf,stroke:#e2659a,color:#0b1630,stroke-width:1.5px
+  </pre></div>
+  </div>
+  <ul class="notes">
+    <li>Antes contabilidad pedía las facturas reunidas en una bolsa; hoy suele obtenerlas de la DIAN y casi no pide envíos.</li>
+    <li>No se asumen conciliaciones, contabilidad integral, cartera ni auditorías.</li>
+  </ul>
+</section>
+
+<section class="phase">
+  <div class="phase-head"><span class="code">V</span><h2>Puntos pendientes de validación</h2></div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Etapa</th><th>Punto</th><th>Estado</th></tr></thead>
+    <tbody>
+      <tr><td>A</td><td>Pasos posteriores a la recopilación de información en garantías</td><td><span class="pill pend">No definido</span></td></tr>
+      <tr><td>A</td><td>Pasos posteriores en mantenimientos</td><td><span class="pill pend">No definido</span></td></tr>
+      <tr><td>A</td><td>Formato de levantamiento de requerimientos</td><td><span class="pill no">No existe</span></td></tr>
+      <tr><td>B</td><td>Plazo y número de mensajes de seguimiento; regla de cierre</td><td><span class="pill pend">No definido</span></td></tr>
+      <tr><td>C</td><td>Porcentajes de anticipo, pago intermedio y pago final</td><td><span class="pill pend">Por confirmar</span></td></tr>
+      <tr><td>C</td><td>Qué se hace cuando el anticipo no llega</td><td><span class="pill pend">Por confirmar</span></td></tr>
+      <tr><td>C</td><td>Secuencia real entre despiece y compras</td><td><span class="pill var">Variable</span></td></tr>
+      <tr><td>C</td><td>Tiempos de fabricación, proveedores y controles de calidad</td><td><span class="pill pend">Sin información</span></td></tr>
+      <tr><td>D</td><td>Lista de verificación de preparación del área</td><td><span class="pill no">No existe</span></td></tr>
+      <tr><td>D</td><td>Destino de las ventanas retiradas</td><td><span class="pill var">Variable</span></td></tr>
+      <tr><td>D</td><td>Acta de entrega formal</td><td><span class="pill no">Deseable, no se ejecuta</span></td></tr>
+      <tr><td>D</td><td>Mecanismo de cobro del saldo final</td><td><span class="pill no">No existe</span></td></tr>
+      <tr><td>D</td><td>Proceso de garantía posterior a la entrega</td><td><span class="pill pend">Información incompleta</span></td></tr>
+      <tr><td>P</td><td>Estado del cotizador y demás proyectos de tecnología</td><td><span class="pill pend">Por confirmar</span></td></tr>
+      <tr><td>General</td><td>Distribución de responsabilidades por función dentro del área comercial y operativa</td><td><span class="pill pend">No formalizada</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+<footer>Mobardi S.A.S. · Levantamiento AS-IS · Documento de diagnóstico, no describe el proceso ideal</footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+<script>
+(function(){
+  if(!window.mermaid) return;
+  mermaid.initialize({startOnLoad:false, securityLevel:'loose', theme:'base',
+    flowchart:{curve:'basis', htmlLabels:true, padding:14},
+    themeVariables:{
+      darkMode:true, background:'transparent', fontFamily:'Instrument Sans, system-ui, sans-serif', fontSize:'14px',
+      primaryColor:'#7cc8ff', primaryTextColor:'#0b1630', primaryBorderColor:'#3a9be0',
+      lineColor:'#8fb4ff', textColor:'#e8eefb', edgeLabelBackground:'#1a2d5e',
+      clusterBkg:'#132550', clusterBorder:'#24396b'
+    }});
+  var pending = document.querySelectorAll('pre.mermaid:not([data-processed])');
+  if(pending.length) mermaid.run({nodes: pending}).catch(function(e){console.error(e)});
+})();
+</script>
+</body>
+</html>
